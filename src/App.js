@@ -6,9 +6,9 @@ import "./App.css";
 
 function App() {
   return (
-      <div className="App">
-        <Board nrows={4} ncols={4} chanceLightStartsOn={Math.random()}/>
-      </div>
+    <div className="App">
+      <Board nrows={1} ncols={1} chanceLightStartsOn={Math.random()} />
+    </div>
   );
 }
 

@@ -34,38 +34,34 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
   function createBoard() {
     let initialBoard = [];
 
-    for (let i = 0; i < nrows; i++){
-
+    for (let i = 0; i < nrows; i++) {
       const rowArray = [];
 
-      for(let k = 0; k < ncols; k++){
-
-        if(chanceLightStartsOn > Math.random()){
+      for (let k = 0; k < ncols; k++) {
+        if (chanceLightStartsOn > Math.random()) {
           rowArray.push(true);
-        }else {
+        } else {
           rowArray.push(false);
         }
       }
 
-      initialBoard.push(rowArray)
+      initialBoard.push(rowArray);
     }
 
     return initialBoard;
   }
 
+  /** Determines whether user has won and returns boolean */
   function hasWon() {
+    const boardSet = new Set(board.flat());
 
-    const boardSet = new Set(board.flat())
-
-    return (boardSet.size === 1 && boardSet.has(false));
-
-
+    return boardSet.size === 1 && boardSet.has(false);
   }
 
+  /** Takes cell coord and flips the color of that cell as well as four around it*/
   function flipCellsAround(coord) {
-
-    setBoard(oldBoard => {
-
+    console.log(coord);
+    setBoard((oldBoard) => {
       const [y, x] = coord.split("-").map(Number);
 
       const flipCell = (y, x, boardCopy) => {
@@ -76,36 +72,40 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
         }
       };
 
-
       const boardCopy = [...oldBoard];
 
+      flipCell(y, x, boardCopy);
+      flipCell(y + 1, x, boardCopy);
+      flipCell(y - 1, x, boardCopy);
+      flipCell(y, x + 1, boardCopy);
+      flipCell(y, x - 1, boardCopy);
 
-      flipCell(y,x, boardCopy);
-      flipCell(y+1,x, boardCopy);
-      flipCell(y-1,x, boardCopy);
-      flipCell(y,x+1, boardCopy);
-      flipCell(y,x-1, boardCopy);
-
-
-      return boardCopy
+      return boardCopy;
     });
   }
 
-  // if the game is won, just show a winning msg & render nothing else
-  return(
+  const cellMatrix = board.map((row, y) =>
+    row.map((val, x) => (
+      <Cell
+        flipCellsAroundMe={flipCellsAround}
+        isLit={val}
+        coord={`${y}-${x}`}
+      />
+    ))
+  );
+
+  return (
     <div>
-      <table>
-      {board.map( row => row.map( val => <Cell flipCellsAroundMe={flipCellsAround} isLit={val} /> ))}
-      </table>
+      {hasWon() && <h1>You Won!!!</h1>}
+      {!hasWon() && (
+        <table>
+          {cellMatrix.map((r) => (
+            <tr>{r}</tr>
+          ))}
+        </table>
+      )}
     </div>
-
-  )
-
-  // TODO
-
-  // make table board
-
-  // TODO
+  );
 }
 
 export default Board;
