@@ -34,6 +34,7 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
   function createBoard() {
     let initialBoard = [];
 
+    //TODO: call variables x and y when dealing with grid
     for (let i = 0; i < nrows; i++) {
       const rowArray = [];
 
@@ -72,6 +73,7 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
         }
       };
 
+      //should make a deep copy of each nested array, can do with map and spread
       const boardCopy = [...oldBoard];
 
       flipCell(y, x, boardCopy);
@@ -94,6 +96,7 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
     ))
   );
 
+  //can have multiple returns in a component, could use it here. If statement check if winner, and then just return H1
   return (
     <div>
       {hasWon() && <h1>You Won!!!</h1>}
